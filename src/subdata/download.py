@@ -60,7 +60,7 @@ def download_datasets(list_of_dataset_names, hf_token=None):
                     
             dict_of_datasets[dataset_name] = df
         
-            print(f'\t{dataset_name} download in {str(np.round(time.time()-start_time,4)).rjust(10)}s')
+            print(f'\t{dataset_name} downloaded in {str(np.round(time.time()-start_time,4)).rjust(10)}s')
         
     return dict_of_datasets
         
