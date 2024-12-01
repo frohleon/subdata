@@ -6,7 +6,7 @@ import importlib.resources
 
 from subdata.download import download_datasets
 from subdata.process import process_datasets
-from subdata.utils import load_mapping, load_taxonomy, load_download
+from subdata.utils import load_mapping, load_taxonomy, load_download, save_modified_resource
 
 
 ### function to update the mapping from dataset keys to targets for a single, specified dataset
@@ -38,16 +38,12 @@ def update_mapping_specific(mapping_change, mapping_name='modified'):
             else:
                 print(f'{key_original} not found as a key in {dataset}-mapping - no change to the mapping has been made. Please refer to the original mapping to identify the spelling and format of valid keys.')
 
-    if not os.path.exists('modified_resources'): # modified resources (mapping, taxonomy, overview) are stored locally
-        os.mkdir('modified_resources')
-
-    with open(f'modified_resources/mapping_{mapping_name}.json', 'w') as f:
-        json.dump(mapping_dict, f)
+    save_modified_resource(mapping_dict, 'mapping_'+mapping_name)
 
     if len(changes) > 0:
         print('Overview of mapping changes:')
         for change in changes:
-            print(f'Dataset: {change[0].ljust(20)} Key: {change[1].ljust(20)} Old Value: {change[2].ljust(20)} New Value: {change[3]}')
+            print(f'\tDataset: {change[0].ljust(20)} Key: {change[1].ljust(20)} Old Value: {change[2].ljust(20)} New Value: {change[3]}')
     else:
         print(f'No changes have been made.')
     
@@ -77,16 +73,12 @@ def update_mapping_all(mapping_change, mapping_name='modified'):
                 mapping_dict[dataset][key_original] = value_new
                 changes.append([dataset, key_original, value_old, value_new])
 
-    if not os.path.exists('modified_resources'): # modified resources (mapping, taxonomy, overview) are stored locally
-        os.mkdir('modified_resources')
-
-    with open(f'modified_resources/mapping_{mapping_name}.json', 'w') as f:
-        json.dump(mapping_dict, f)
+    save_modified_resource(mapping_dict, 'mapping_'+mapping_name)
     
     if len(changes) > 0:
         print('Overview of mapping changes:')
         for change in changes:
-            print(f'Dataset: {change[0].ljust(20)} Key: {change[1].ljust(20)} Old Value: {change[2].ljust(20)} New Value: {change[3]}')
+            print(f'\tDataset: {change[0].ljust(20)} Key: {change[1].ljust(20)} Old Value: {change[2].ljust(20)} New Value: {change[3]}')
     else:
         print(f'No changes have been made.')
 
@@ -124,20 +116,63 @@ def update_taxonomy(taxonomy_change, taxonomy_name='modified'):
         else:
             print(f'{target} not found in original category {old_category}. Please refer to the original taxonomy to specify the correct original category and/or a valid target.')
 
-    if not os.path.exists('modified_resources'): # modified resources (mapping, taxonomy, overview) are stored locally
-        os.mkdir('modified_resources')
-
-    with open(f'modified_resources/taxonomy_{taxonomy_name}.json', 'w') as f:
-        json.dump(taxonomy_dict, f)
+    save_modified_resource(taxonomy_dict, 'taxonomy_'+taxonomy_name)
     
     if len(changes) > 0:
         print('Overview of taxonomy changes:')
         for change in changes:
-            print(f'Target: {change[0].ljust(20)} Old Category: {change[1].ljust(20)} New Category: {change[2].ljust(20)}')
+            print(f'\tTarget: {change[0].ljust(20)} Old Category: {change[1].ljust(20)} New Category: {change[2].ljust(20)}')
     else:
         print(f'No changes have been made.')
 
     return taxonomy_dict
+
+
+# input:
+# - target: str, name of the new target to be added
+# - target_category: str, category of the new target to be added (must be existing)
+# - target_keywords: [list of str], keywords that map to the new target (must be existing)
+# - mapping_name: str, name of the new mapping that is created by adding the target
+# - taxonomy_name: str, name of the new taxonomy that is created by adding the target
+def add_target(target, target_category, target_keywords, mapping_name='modified', taxonomy_name='modified'):
+
+    mapping_dict = load_mapping(mapping_name)
+    taxonomy_dict = load_taxonomy(taxonomy_name)
+
+    if target_category not in taxonomy_dict.keys():
+        print(f'{category} is not a valid category. Please refer to the taxonomy to specify a valid category.')
+        return None
+
+    taxonomy_dict[target_category].append(target)
+    print(f'{target} has been successfully added to {category} in taxonomy {taxonomy_name}.')
+
+    changes = []
+
+    for target_keyword in target_keywords:
+        if not target_keyword in mapping_dict.keys():
+            print(f'{target_keyword} does not exist. Please refer to the mapping to specify an existing keyword.')
+            continue
+        else:
+            old_target = mapping_dict[target_keyword]
+            mapping_dict[target_keyword] = target
+            changes.append([target_keyword, old_target, target])
+
+    save_modified_resource(mapping_dict, 'mapping_'+mapping_name)
+    save_modified_resource(taxonomy_dict, 'taxonomy_'+taxonomy_name)
+
+    print(f'{target} added as new target in category {target_category}.')
+    
+    if len(changes) > 0:
+        print('Overview of changes in mapping {mapping_name}:')
+        for change in changes:
+            print(f'\tKeyword: {change[0].ljust(20)} Old Target: {change[1].ljust(20)} New Target: {change[2].ljust(20)}')
+    else:
+        print(f'No changes have been made.')
+
+    return mapping_dict
+
+
+
 
 
 # input: {overivew_name='modified', mapping_name='modified', taxonomy_name='modified'} the name of the overview to generate and the names of the (modified) taxonomy and mapping to use for the creation of the overview. (if both mapping and taxonomy are 'original' the call will never lead to changes since a modified mapping and taxonomy can never be named original)
@@ -185,7 +220,6 @@ def update_overview(overview_name='modified', mapping_name='modified', taxonomy_
 
     overview_dict = create_overview_dict(df_overview)
 
-    with open(f'modified_resources/overview_dict_{overview_name}.json', 'w') as f:
-        json.dump(overview_dict, f)
+    save_modified_resource(overview_dict, 'overview_'+overview_name)
     
     return df_overview

@@ -79,7 +79,7 @@ def get_category_info(category, overview_name='original', taxonomy_name='origina
     overview_dict = load_overview(overview_name) 
     taxonomy_dict = load_taxonomy(taxonomy_name)
 
-    if category not in list(set(taxonomy_dict.keys())):
+    if category not in taxonomy_dict.keys():
         print(f'{category} is not a valid category. Please refer to the taxonomy to specify a valid category.')
     
     relevant_datasets = [dataset for target in taxonomy_dict[category] for dataset in overview_dict[target]]

@@ -21,16 +21,16 @@ def load_process():
 def load_overview(overview_name):
 
     if overview_name == 'original':
-        with importlib.resources.open_text('subdata.resources', 'overview_dict_original.json') as file:
+        with importlib.resources.open_text('subdata.resources', 'overview_original.json') as file:
             overview_dict = json.load(file)
         print('Using original overview.')
     else:
-        if os.path.exists(f'modified_resources/overview_dict_{overview_name}.json'):
-            with open(f'modified_resources/overview_dict_{overview_name}.json') as file:
+        if os.path.exists(f'modified_resources/overview_{overview_name}.json'):
+            with open(f'modified_resources/overview_{overview_name}.json') as file:
                 overview_dict = json.load(file)
             print(f'Using {overview_name} overview.')
         else:
-            with importlib.resources.open_text('subdata.resources', 'overview_dict_original.json') as file:
+            with importlib.resources.open_text('subdata.resources', 'overview_original.json') as file:
                 overview_dict = json.load(file)
             print(f'Overview with name {overview_name} does not exist. Using original overview instead.')
 
@@ -73,4 +73,13 @@ def load_taxonomy(taxonomy_name):
             print(f'Taxonomy with name {taxonomy_name} does not exist. Using original taxonomy instead.')
 
     return taxonomy_dict
+
+
+def save_modified_resource(resource, resource_name):
+
+    if not os.path.exists('modified_resources'): # modified resources (mapping, taxonomy, overview) are stored locally
+        os.mkdir('modified_resources')
+
+    with open(f'modified_resources/{resource_name}.json', 'w') as f:
+        json.dump(resource, f)
     
