@@ -10,7 +10,7 @@ setup(
         'numpy',
         'huggingface_hub',
         'pyarrow',
-        'fastparquet'
+        # 'fastparquet'
     ],
     author='Leon Fröhling',  
     author_email='leon.froehling@gesis.org',
