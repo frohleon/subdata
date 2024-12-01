@@ -32,7 +32,7 @@ def load_overview(overview_name):
         else:
             with importlib.resources.open_text('subdata.resources', 'overview_original.json') as file:
                 overview_dict = json.load(file)
-            print(f'Overview with name {overview_name} does not exist. Using original overview instead.')
+            print(f'Overview with name {overview_name} does not (yet) exist. Loading original overview.')
 
     return overview_dict
 
@@ -51,7 +51,7 @@ def load_mapping(mapping_name):
         else:
             with importlib.resources.open_text('subdata.resources', 'mapping_original.json') as file:
                 mapping_dict = json.load(file)
-            print(f'Mapping with name {mapping_name} does not exist. Using original mapping instead.')
+            print(f'Mapping with name {mapping_name} does not (yet) exist. Loading original mapping.')
 
     return mapping_dict
 
@@ -70,7 +70,7 @@ def load_taxonomy(taxonomy_name):
         else:
             with importlib.resources.open_text('subdata.resources', 'taxonomy_original.json') as file:
                 taxonomy_dict = json.load(file)
-            print(f'Taxonomy with name {taxonomy_name} does not exist. Using original taxonomy instead.')
+            print(f'Taxonomy with name {taxonomy_name} does not (yet) exist. Loading original taxonomy.')
 
     return taxonomy_dict
 

@@ -10,3 +10,4 @@ from subdata.update import update_mapping_specific
 from subdata.update import update_mapping_all
 from subdata.update import update_taxonomy
 from subdata.update import update_overview
+from subdata.update import add_target

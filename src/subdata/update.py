@@ -140,11 +140,11 @@ def add_target(target, target_category, target_keywords, mapping_name='modified'
     taxonomy_dict = load_taxonomy(taxonomy_name)
 
     if target_category not in taxonomy_dict.keys():
-        print(f'{category} is not a valid category. Please refer to the taxonomy to specify a valid category.')
+        print(f'{target_category} is not a valid category. Please refer to the taxonomy to specify a valid category.')
         return None
 
     taxonomy_dict[target_category].append(target)
-    print(f'{target} has been successfully added to {category} in taxonomy {taxonomy_name}.')
+    print(f'{target} has been successfully added to {target_category} in taxonomy {taxonomy_name}.')
 
     changes = []
 
