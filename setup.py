@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='subdata',  # Replace with your package’s name
-    version='0.1.12',
+    version='0.1.13',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[ # List your dependencies here
