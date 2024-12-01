@@ -23,7 +23,7 @@ setup(
     long_description_content_type = 'text/markdown',
     classifiers=[
         'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',  # License type
+        'License :: OSI Approved :: GPL-3.0',  # License type
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.10',
