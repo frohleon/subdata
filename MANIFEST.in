@@ -1,1 +1,1 @@
-include subdata/resources/*
+include src/subdata/resources/*
