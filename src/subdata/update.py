@@ -149,23 +149,25 @@ def add_target(target, target_category, target_keywords, mapping_name='modified'
     changes = []
 
     for target_keyword in target_keywords:
-        if not target_keyword in mapping_dict.keys():
+        keyword_dummy = False
+        for dataset_name in mapping_dict.keys():
+            if not target_keyword in mapping_dict[dataset_name].keys():
+                continue
+            else:
+                keyword_dummy = True
+                old_target = mapping_dict[dataset_name][target_keyword]
+                mapping_dict[dataset_name][target_keyword] = target
+                changes.append([dataset_name, target_keyword, old_target, target])
+        if not keyword_dummy:
             print(f'{target_keyword} does not exist. Please refer to the mapping to specify an existing keyword.')
-            continue
-        else:
-            old_target = mapping_dict[target_keyword]
-            mapping_dict[target_keyword] = target
-            changes.append([target_keyword, old_target, target])
 
     save_modified_resource(mapping_dict, 'mapping_'+mapping_name)
     save_modified_resource(taxonomy_dict, 'taxonomy_'+taxonomy_name)
-
-    print(f'{target} added as new target in category {target_category}.')
     
     if len(changes) > 0:
         print('Overview of changes in mapping {mapping_name}:')
         for change in changes:
-            print(f'\tKeyword: {change[0].ljust(20)} Old Target: {change[1].ljust(20)} New Target: {change[2].ljust(20)}')
+            print(f'\tDataset: {change[0].ljust(20)} Keyword: {change[1].ljust(20)} Old Target: {change[2].ljust(20)} New Target: {change[3].ljust(20)}')
     else:
         print(f'No changes have been made.')
 
