@@ -159,7 +159,7 @@ def add_target(target, target_category, target_keywords, mapping_name='modified'
                 mapping_dict[dataset_name][target_keyword] = target
                 changes.append([dataset_name, target_keyword, old_target, target])
         if not keyword_dummy:
-            print(f'{target_keyword} does not exist. Please refer to the mapping to specify an existing keyword.')
+            print(f'Keyword {target_keyword} does not exist. Please refer to the mapping to specify an existing keyword.')
 
     save_modified_resource(mapping_dict, 'mapping_'+mapping_name)
     save_modified_resource(taxonomy_dict, 'taxonomy_'+taxonomy_name)
