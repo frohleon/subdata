@@ -38,7 +38,7 @@ def download_datasets(list_of_dataset_names, hf_token=None):
         
         dataset_dict = download_dict[dataset_name]
         
-        req = check_requirements(dataset_dict, hf_token)
+        req = check_requirements(dataset_name, dataset_dict, hf_token)
         
         if req == True:
             
@@ -60,7 +60,7 @@ def download_datasets(list_of_dataset_names, hf_token=None):
                     
             dict_of_datasets[dataset_name] = df
         
-        print(f'\t{dataset_name} download in {str(np.round(time.time()-start_time,4)).rjust(10)}s')
+            print(f'\t{dataset_name} download in {str(np.round(time.time()-start_time,4)).rjust(10)}s')
         
     return dict_of_datasets
         
@@ -118,7 +118,7 @@ def download_mathew_2021(dataset_dict):
                     temp_.append([row['text'],t])
     return pd.DataFrame(temp_, columns=['text','target'])
     
-def check_requirements(dataset_dict, hf_token=None):
+def check_requirements(dataset_name, dataset_dict, hf_token=None):
     # given requirements specified in dataset_dicts, check whether requirements for dataset are fulfilled
     match dataset_dict['requirement']:
         case 'hf_token':
@@ -126,23 +126,23 @@ def check_requirements(dataset_dict, hf_token=None):
                 if hf_token.startswith('hf_'):
                     try:
                         login(hf_token)
-                        print('Huggingface login successful.')
+                        print(f'\t{dataset_name} - Huggingface login successful.')
                         return True
                     except:
-                        print('Please provide a valid huggingface token.')
+                        print(f'\t{dataset_name} unavailable - Please provide a valid huggingface token.')
                         return False
                 else:
-                    print('Please provide a valid huggingface token.')
+                    print(f'\t{dataset_name} unavailable - Please provide a valid huggingface token.')
                     return False
             else:
-                print('No huggingface token found. Please provide a valid huggingface token.')
+                print(f'\t{dataset_name} unavailable - No huggingface token found. Please provide a valid huggingface token.')
                 return False
         case 'dataset_upload':
             if os.path.exists('input_folder/'+dataset_dict['filename']+'.zip'):
-                print('Manual dataset upload successful.')
+                print(f'\t{dataset_name} - Manual dataset upload successful.')
                 return True
             else:
-                print(f'Required dataset {dataset_dict["filename"]+".zip"} not found. Please check instructions and manually upload the dataset to the current working directory.')
+                print(f'\t{dataset_name} unavailable - Required dataset {dataset_dict["filename"]+".zip"} not found. Please check instructions and manually upload the dataset to the current working directory.')
                 return False
         case _:
             return True

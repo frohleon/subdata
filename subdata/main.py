@@ -20,6 +20,9 @@ if not os.path.exists('input_folder'):
 def create_target_dataset(target, mapping_name='original', overview_name='original', hf_token=None):
 
     overview_dict = load_overview(overview_name)
+
+    if target not in list(set(overview_dict.keys())):
+        print(f'{target} is not a valid target. Please refer to the taxonomy to specify a valid target.')
     
     relevant_datasets = [dataset[0] for dataset in overview_dict[target]]
     dict_of_datasets = download_datasets(relevant_datasets, hf_token)
@@ -34,6 +37,9 @@ def create_category_dataset(category, mapping_name='original', taxonomy_name='or
 
     overview_dict = load_overview(overview_name)
     taxonomy_dict = load_taxonomy(taxonomy_name)
+
+    if category not in list(set(taxonomy_dict.keys())):
+        print(f'{category} is not a valid category. Please refer to the taxonomy to specify a valid category.')
     
     targets = taxonomy_dict[category]
     relevant_datasets = list(set([dataset[0] for target in targets for dataset in overview_dict[target]]))
@@ -56,6 +62,9 @@ def get_target_info(target, overview_name='original'):
 
     instruction_dict = load_instruction()
     overview_dict = load_overview(overview_name)  
+
+    if target not in list(set(overview_dict.keys())):
+        print(f'{target} is not a valid target. Please refer to the taxonomy to specify a valid target.')
     
     relevant_datasets = overview_dict[target]
     n_total = np.sum([dataset[1] for dataset in relevant_datasets])
@@ -69,6 +78,9 @@ def get_category_info(category, overview_name='original', taxonomy_name='origina
     instruction_dict = load_instruction()
     overview_dict = load_overview(overview_name) 
     taxonomy_dict = load_taxonomy(taxonomy_name)
+
+    if category not in list(set(taxonomy_dict.keys())):
+        print(f'{category} is not a valid category. Please refer to the taxonomy to specify a valid category.')
     
     relevant_datasets = [dataset for target in taxonomy_dict[category] for dataset in overview_dict[target]]
     unique_datasets = list(set([dataset[0] for dataset in relevant_datasets]))
