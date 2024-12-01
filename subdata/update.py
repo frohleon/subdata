@@ -6,6 +6,7 @@ import importlib.resources
 
 from subdata.download import download_datasets
 from subdata.process import process_datasets
+from subdata.utils import load_mapping, load_taxonomy, load_download
 
 
 ### function to update the mapping from dataset keys to targets for a single, specified dataset
@@ -17,14 +18,7 @@ def update_mapping_specific(mapping_change, mapping_name='modified'):
         print(f'Please choose another name for the new mapping. {mapping_name} is not allowed.')
         return None
         
-    if os.path.exists(f'modified_resources/mapping_{mapping_name}.json'):
-        with open(f'modified_resources/mapping_{mapping_name}.json') as file:
-            mapping_dict = json.load(file)
-        print(f'Updating mapping called {mapping_name}.')
-    else:
-        with importlib.resources.open_text('subdata.resources', 'mapping_original.json') as file:
-            mapping_dict = json.load(file)
-        print('Updating original mapping.')
+    mapping_dict = load_mapping(mapping_name)
 
     valid_targets = [e for t in list(set([v for k_,d in mapping_dict.items() for k,v in d.items()])) for e in t.split(',')] # trust the process
     changes = []
@@ -68,14 +62,7 @@ def update_mapping_all(mapping_change, mapping_name='modified'):
         print(f'Please choose another name for the new mapping. {mapping_name} is not allowed.')
         return None
 
-    if os.path.exists(f'modified_resources/mapping_{mapping_name}.json'):
-        with open(f'modified_resources/mapping_{mapping_name}.json') as file:
-            mapping_dict = json.load(file)
-        print(f'Updating mapping called {mapping_name}.')
-    else:
-        with importlib.resources.open_text('subdata.resources', 'mapping_original.json') as file:
-            mapping_dict = json.load(file)
-        print('Updating original mapping.')
+    mapping_dict = load_mapping(mapping_name)
 
     valid_targets = [e for t in list(set([v for k_,d in mapping_dict.items() for k,v in d.items()])) for e in t.split(',')] # trust the process
     changes = []
@@ -115,14 +102,7 @@ def update_taxonomy(taxonomy_change, taxonomy_name='modified'):
         print(f'Please choose another name for the new taxonomy. {taxonomy_name} is not allowed.')
         return None
 
-    if os.path.exists(f'modified_resources/taxonomy_{taxonomy_name}.json'):
-        with open(f'modified_resources/taxonomy_{taxonomy_name}.json') as file:
-            taxonomy_dict = json.load(file)
-        print(f'Updating taxonomy called {taxonomy_name}.')
-    else:
-        with importlib.resources.open_text('subdata.resources', 'taxonomy_original.json') as file:
-            taxonomy_dict = json.load(file)
-        print('Updating original taxonomy.')
+    taxonomy_dict = load_taxonomy(taxonomy_name)
 
     changes = []
 
@@ -174,30 +154,15 @@ def create_overview_dict(df_overview):
                 
     return dict_overview
 
+### requires user to specify the name of the mapping and taxonomy to be used. defaults to 'modified' for both.
 def update_overview(overview_name='modified', mapping_name='modified', taxonomy_name='modified', hf_token=None):
 
     if overview_name.lower() == 'original':
         print('Please choose another name for the new overview. "original" is not allowed.')
         return None
 
-    if taxonomy_name.lower() == 'original':
-        if mapping_name.lower() == 'original':
-            print('Please specify the name of a modified mapping or taxonomy. "original" is the mapping and taxonomy already used for the current overview, no update necessary.')
-            return None
-
-    if taxonomy_name != 'original': # if not original version requested
-        if os.path.exists(f'modified_resources/taxonomy_{taxonomy_name}.json') == False: # if requested modified version does not exist
-            print(f'Please specify the name of an existing taxonomy. No modified taxonomy with name {taxonomy_name} exists.')
-            return None
-        else: # if requested modified version exists
-            with open(f'modified_resources/taxonomy_{taxonomy_name}.json', 'r') as file:
-                taxonomy_dict = json.load(file)
-    else: # if original version requested
-        with importlib.resources.open_text('subdata.resources', 'taxonomy_original.json') as file:
-            taxonomy_dict = json.load(file)
-
-    with importlib.resources.open_text('subdata.resources', 'download_dict.json') as file:
-        download_dict = json.load(file)
+    taxonomy_dict = load_taxonomy(taxonomy_name)
+    download_dict = load_download()
 
     list_of_dataset_names = [k for k in download_dict.keys()]
     dict_of_datasets = download_datasets(list_of_dataset_names, hf_token)
