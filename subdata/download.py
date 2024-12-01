@@ -27,6 +27,8 @@ from subdata.utils import load_download
 
 def download_datasets(list_of_dataset_names, hf_token=None):
 
+    print(f'Starting to download {len(list_of_dataset_names)} datasets.')
+
     download_dict = load_download()
     
     dict_of_datasets = {}
@@ -54,11 +56,11 @@ def download_datasets(list_of_dataset_names, hf_token=None):
                 case 'mathew_2021':
                     df = download_mathew_2021(dataset_dict)
                 case _:
-                    print(f'Error in downloading {dataset_name}: Unknown format.')
+                    print(f'\tError in downloading {dataset_name}: Unknown format.')
                     
             dict_of_datasets[dataset_name] = df
         
-        print(f'{str(np.round(time.time()-start_time,4)).rjust(10)}s for {dataset_name}')
+        print(f'\t{dataset_name} download in {str(np.round(time.time()-start_time,4)).rjust(10)}s')
         
     return dict_of_datasets
         

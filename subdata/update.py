@@ -174,7 +174,7 @@ def update_overview(overview_name='modified', mapping_name='modified', taxonomy_
     })
     
     for dataset_name in list_of_dataset_names:
-        if not dataset_name in list_of_dataset_names:
+        if not dataset_name in dict_of_processed_datasets.keys():
             continue
         df = dict_of_processed_datasets[dataset_name]
         n_targets = []

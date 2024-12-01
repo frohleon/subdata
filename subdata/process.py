@@ -18,6 +18,8 @@ def process_datasets(dict_of_datasets, mapping_name='original'):
     mapping_dict = load_mapping(mapping_name)
     process_dict = load_process()
 
+    print(f'Starting to process {len(dict_of_datasets.keys())} datasets.')
+
     dict_of_processed_datasets = {}
     
     for dataset_name, df in dict_of_datasets.items():
@@ -36,7 +38,7 @@ def process_datasets(dict_of_datasets, mapping_name='original'):
         df['dataset'] = dataset_name
         dict_of_processed_datasets[dataset_name] = df
         
-        print(f'{str(np.round(time.time()-start_time,4)).rjust(10)}s for {dataset_name}')
+        print(f'\t{dataset_name} processed in {str(np.round(time.time()-start_time,4)).rjust(10)}s')
                 
     return dict_of_processed_datasets
                    
