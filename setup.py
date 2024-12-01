@@ -12,6 +12,7 @@ setup(
         'pyarrow',
         # 'fastparquet'
     ],
+    url = 'https://github.com/frohleon/subdata_library',
     author='Leon Fröhling',  
     author_email='leon.froehling@gesis.org',
     description='A library for automatically creating targeted hate speech datasets.',
