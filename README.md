@@ -3,16 +3,7 @@
 |age|disabled|gender|migration|origin|political|race|religion|sexuality|
 |---|---|---|---|---|---|---|---|---|---|---|
 |middle_aged|disabled_intellectual|men|migrants|arabs|communists|asians|atheists|asexuals|
-|seniors|disabled_mental|non_binary|refugees|brits|conservatives|blacks|buddhists|bisexuals|
-|young_aged|disabled_unspecified|transgenders|undocumented|chinese|democrats|indigenous|christians|heterosexuals|
-|age_unspecified|test|women|migration_unspecified|eastern_european|left-wingers|latinx|hindus|homosexuals|
-|test|test|gender_unspecified|test|indians|liberals|native_americans|jews|lgbtq_unspecified|
-|test|test|test|test|mexicans|republicans|pacific_islanders|mormons|sexuality_unspecified|
-|test|test|test|test|middle_eastern|right-wingers|whites|muslims|test|
-|test|test|test|test|pakistani|political_unspecified|race_unspecified|religion_unspecified|test|
-|test|test|test|test|polish|test|test|test|test|
-|test|test|test|test|russians|test|test|test|test|
-|test|test|test|test|origin_unspecified|test|test|test|test
+
 
 ### Original Mapping
 The following tables document the original mapping that is used in the subdata library to map the target keywords found in the original datasets to a single taxonomy of target groups. 
