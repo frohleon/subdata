@@ -318,8 +318,25 @@ Vidgen et al. (2021)
 |trans, wom|transgenders|
 |wom|women|
 
+### Original Taxonomy
 
-Current functionality:
+|age|disabled|gender|migration|origin|political|race|religion|sexuality|
+|---|---|---|---|---|---|---|---|---|---|---|
+|middle_aged|disabled_intellectual|men|migrants|arabs|communists|asians|atheists|asexuals|
+|seniors|disabled_mental|non_binary|refugees|brits|conservatives|blacks|buddhists|bisexuals|
+|young_aged|disabled_unspecified|transgenders|undocumented|chinese|democrats|indigenous|christians|heterosexuals|
+|age_unspecified||women|migration_unspecified|eastern_european|left-wingers|latinx|hindus|homosexuals|
+|||gender_unspecified||indians|liberals|native_americans|jews|lgbtq_unspecified|
+|||||mexicans|republicans|pacific_islanders|mormons|sexuality_unspecified|
+|||||middle_eastern|right-wingers|whites|muslims||
+|||||pakistani|political_unspecified|race_unspecified|religion_unspecified||
+|||||polish|||||
+|||||russians|||||
+|||||origin_unspecified|||||
+
+
+### Library Functionality
+
 - create_target_dataset
   - input: target (str), mapping_name (str, default 'original'), overview_name (str, default 'original', hf_token (str, default None)
   - takes a valid target, downloads, processes and combines all available datasets for the target and returns a single dataset df with text, target and source columns. some datasets are only available if providing a valid huggingface token or uploading the raw data to input_folder. uses the specified mapping, taxononmy and overview for the creation of the dataset, defaulting to the original versions.
