@@ -1,6 +1,9 @@
 ### Placeholder
 
-### Library Functionality
+### Library Documentation
+In the following, we explain the core functionality of the subdata library. Most importantly, the functions *create_target_dataset* and *create_category_dataset* allow the user to automatically download, process and combine instances targeted at a specified target group or category from different data sources into a single dataset, using a standardized mapping from keywords to target and a unified taxonomy. The functions *get_target_info* and *get_category_info* may be consulted before the call to create the actual dataset, as they provide the info on the number of instances and data sources available for the specified target groups or categories.
+
+In addition to the library's core functionality, we took care to implement the possibility to modify the resources we provide, namely, the mapping from keywords found in the original datasets to target groups and the assignment of target groups into categories. The functions *update_mapping_specific* and *update_mapping_all* allow to map a set of keywords to another target group, either for a single dataset or across all datasets. The function *add_target* allows to introduce a new target group altogether, while the function *update_taxonomy* allows to move target groups from one category to another as well as to even create new categories, assigning multiple existing target groups into the new category. Lastly, the function *update_overview* should be called after any modification to the mapping or the taxonomy is done in order to update the overview used internally to combine the requested dataset when calling *create_target_dataset* or *create_category_dataset*.
 
 *create_target_dataset*
   - input: target (str), mapping_name (str, default 'original'), overview_name (str, default 'original', hf_token (str, default None)
@@ -24,7 +27,7 @@
 
 *update_mapping_specific*
   - input: mapping_change ({dataset_name: {key_original: value_new}}), mapping_name (str, default 'modified')
-  - updates the specified mapping (either newly created if mapping_name non-existent or updating if mapping_name already created earlier) per dataset according to the provided dictionary. referring to the original mapping, users may map the key_original found in the original dataset_name to new targets (value_new). e.g., {'fanton_2021': {'POC': 'blacks'}} would map instances in dataset 'fanton_2021' that have the key_original 'POC' to value_new 'blacks' (originally, these are mapped to 'race_unspecified'). stores the resulting mapping with name 'mapping_name'. requires existing key_original (keys in original datasets) and value_new (targets) - refer to original mapping to identify valid values.
+  - updates the specified mapping (either new ly created if mapping_name non-existent or updating if mapping_name already created earlier) per dataset according to the provided dictionary. referring to the original mapping, users may map the key_original found in the original dataset_name to new targets (value_new). e.g., {'fanton_2021': {'POC': 'blacks'}} would map instances in dataset 'fanton_2021' that have the key_original 'POC' to value_new 'blacks' (originally, these are mapped to 'race_unspecified'). stores the resulting mapping with name 'mapping_name'. requires existing key_original (keys in original datasets) and value_new (targets) - refer to original mapping to identify valid values.
   - output: mapping_dict (df) 
 
 *update_mapping_all*
