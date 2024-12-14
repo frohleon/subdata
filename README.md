@@ -1,5 +1,18 @@
 ### Placeholder
 
+### Original Mapping
+
+|keyword|target|
+|---|---|
+|DISABLED|disabled_unspecified|
+|JEWS|jews|
+|LGBT+|lgbtq_unspecified|
+|MIGRANTS|migrants|
+|MUSLIMS|muslims|
+|POC|race_unspecified|
+|WOMEN|women|
+
+
 Current functionality:
 - create_target_dataset
   - input: target (str), mapping_name (str, default 'original'), overview_name (str, default 'original', hf_token (str, default None)
