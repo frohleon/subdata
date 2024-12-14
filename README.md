@@ -1,22 +1,46 @@
 ### Placeholder
 
-|age|disabled|gender|migration|origin|political|race|religion|sexuality|
-|---|---|---|---|---|---|---|---|---|
-|middle_aged|disabled_intellectual|men|migrants|arabs|communists|asians|atheists|asexuals|
-|seniors|disabled_mental|non_binary|refugees|brits|conservatives|blacks|buddhists|bisexuals|
-|young_aged|disabled_unspecified|transgenders|undocumented|chinese|democrats|indigenous|christians|heterosexuals|
-|age_unspecified||women|migration_unspecified|eastern_european|left-wingers|latinx|hindus|homosexuals|
-|||gender_unspecified||indians|liberals|native_americans|jews|lgbtq_unspecified|
-|||||mexicans|republicans|pacific_islanders|mormons|sexuality_unspecified|
-|||||middle_eastern|right-wingers|whites|muslims||
-|||||pakistani|political_unspecified|race_unspecified|religion_unspecified||
-|||||polish|||||
-|||||russians|||||
-|||||origin_unspecified|||||
+### Library Functionality
 
+*create_target_dataset*
+  - input: target (str), mapping_name (str, default 'original'), overview_name (str, default 'original', hf_token (str, default None)
+  - takes a valid target, downloads, processes and combines all available datasets for the target and returns a single dataset df with text, target and source columns. some datasets are only available if providing a valid huggingface token or uploading the raw data to input_folder. uses the specified mapping, taxononmy and overview for the creation of the dataset, defaulting to the original versions.
+  - output: target_dataset (df) 
+
+*create_category_dataset*
+  - input: category (str), mapping_name (str, default 'original'), taxonomy_name (str, default 'original', overview_name (str, default 'original'), hf_token (str, default None)
+  - takes a valid category, downloads, processes and combines all available datasets for the targets in that category and returns a single dataset df with text, target and source columns. some datasets are only available if providing a valid huggingface token or uploading the raw data to input_folder. uses the specified mapping, taxononmy and overview for the creation of the dataset, defaulting to the original versions.
+  - output: target_dataset (df)
+- get_target_info
+  - input: target (str), overview_name (str, default 'original')
+  - takes a valid target and returns an overview of the datasets from which the target is available, the number of instances for the target in the dataset as well as the access requirements for the dataset. if the dataset is not readily available there is also information on how to access the dataset. uses the specified overview for the provided information, defaulting to the original version.
+  - output: none
+- get_category_info
+  - input: category (str), overview_name (str, default 'original'), taxonomy_name (str, default 'original')
+  - takes a valid category and returns an overview of the targets and the corresponding number of instances within the category, an overview of the datasets from which the targets are available and the corresponding number of instances per dataset, as well as the access requirements for the dataset. if the dataset is not readily available there is also information on how to access the dataset. uses the specified taxonomy and overview for the provided information, defaulting to the original versions.
+  - output: none
+- update_mapping_specific
+  - input: mapping_change ({dataset_name: {key_original: value_new}}), mapping_name (str, default 'modified')
+  - updates the specified mapping (either newly created if mapping_name non-existent or updating if mapping_name already created earlier) per dataset according to the provided dictionary. referring to the original mapping, users may map the key_original found in the original dataset_name to new targets (value_new). e.g., {'fanton_2021': {'POC': 'blacks'}} would map instances in dataset 'fanton_2021' that have the key_original 'POC' to value_new 'blacks' (originally, these are mapped to 'race_unspecified'). stores the resulting mapping with name 'mapping_name'. requires existing key_original (keys in original datasets) and value_new (targets) - refer to original mapping to identify valid values.
+  - output: mapping_dict (df) 
+- update_mapping_all
+  - input: mapping_change ({key_original: value_new}), mapping_name (str, default 'modified')
+  - updates the specified mapping (either newly created if mapping_name non-existent or updating if mapping_name already created earlier) across datasets according to the provided dictionary. referring to the original mapping, users may map the key_original found in different datasets to new targets (value_new). e.g., {'africans': 'origin_unspecified'} would map instances in any dataset that have the key_original 'africans' to value_new 'origin_unspecified' (originally, these are mapped to 'blacks'). stores the resulting mapping with name 'mapping_name'. requires existing key_original (keys in original datasets) and value_new (targets) - refer to original mapping to identify valid values.
+  - output: mapping_dict (df) 
+- update_taxonomy
+  - input: taxonomy_change ({target: (old_category, new_category)}), taxonomy_name (str, default 'modified')
+  - updates the specified taxonomy (either newly created if taxonomy_name non-existent or updating if taxonomy_name already created earlier), moving the specified target from old_category to new_category. if new_category == None, then the target will effectively be removed from the updated taxonomy. if new_category (str) not found in specified taxonomy, a new category with name new_category will be added to the updated taxonomy. e.g., {'jews': ('religion', 'race')} will move target 'jews' from category 'religion' to category 'race'. e.g., {'jews': ('religion', None)} will remove target 'jews' from taxonomy. e.g., {'jews': ('religion', 'relevant'), 'blacks': ('race', 'relevant'} will move targets 'jews' and 'blacks' into newly created category 'relevant'.
+  - output: taxonomy_dict (df)
+- add_target
+  - input: target (str), target_category (str), target_keywords [list of str], mapping_name (str, default 'modified'), taxonomy_name (str, default 'modified')
+  - creates a new target and moves it into specified target_category for the specified taxonomy (either newly created if taxonomy_name non-existent or updating if taxonomy_name already created earlier), mapping all original keywords specified in target_keywords to the new target for the specified mapping (either newly created if mapping_name non-existent or updating if mapping_name already created earlier). the target_category and target_keywords must already be existing - please refer to the taxonomy and the mapping to identify a valid target_category and valid target_keywords. e.g., target='disabled_general', target_category='disability', target_keywords=['disabled_unspecified','disabled','disabled_other'] creates new target 'disabled_general' in category 'disability' and maps the specified keywords to the newly created target.
+  - output: mapping_dict (df)
+- update_overview
+  - input: overview_name (str, default 'modified'), mapping_name (str, default 'modified'), taxonomy_name (str, defaut 'modified'), hf_token (str, default None)
+  - updates the overview that informs the get_info and create_dataset functions and stores the new overview with name overview_name. uses the mapping and taxonomy provided via mapping_name and taxonomy_name to create the updated overview. internally, the function tries to access all datasets to create the full overview, thus requiring a hf_token and the manual upload of relevant datasets into input_folder to consider all available datasets. function should be called after any operation that modifies the mapping or the taxonomy.    
 
 ### Original Mapping
-The following tables document the original mapping that is used in the subdata library to map the target keywords found in the original datasets to a single taxonomy of target groups. 
+The following tables document the original mapping that is used in the subdata library to map the target keywords found in the original datasets to a single taxonomy of target groups. In creating this mapping, we tried to strike a delicate balance between being as precise and specific as possible while keeping the resulting target groups still sufficiently general. Whenever multiple datasets used similar specific target groups, we also introduced the corresponding target group (e.g., disabled_mental). When a dataset used a keyword without mentioning the target group more specifically, we mapped it into a more general target group introduced for each category (e.g., disabled_unspecified). 
 
 For the mapping, most of the decisions taken were rather straightforward and little contested, e.g., it seems logical to map both the target “JEWS” found in one dataset and the target “jewish people” found in another dataset to the single target “jews”. However, some decisions were more complicated. Whether the target “africans” should be mapped to the target “blacks” or to the target “africans”, thus interpreting it as a question of origin rather than one of race, might never be definitely determined. In such cases, we tried to consult the publication corresponding to the dataset to see whether the original creators of the resource specifically mentioned one of the potential meanings. If so, we followed their example, and if not, we tried to apply reasonable judgment and be consistent throughout the mapping.
 
@@ -335,56 +359,22 @@ Vidgen et al. (2021)
 
 ### Original Taxonomy
 
+The following tables document the original taxonomy that is used in the subdata library to assign target groups into categories. 
+
+For the taxonomy, again, most of the choices were uncontested and in line with the way that some of the original datasets assign targets to certain categories. However, there are some critical decisions we had to take. Least resolvable is probably the observation that many datasets feature an LGBTQ+ target group that is not further specified, thus mixing together both gender identities and sexual preferences. In most of those datasets, this LGBTQ+ target group ended up as part of a category called Sexuality or Sexual Orientation. We are aware that by mirroring this decision we are also replicating the confusion of gender identity and sexual preference, however, there is no real alternative for our taxonomy since we are unable to divide apart the different components of this rather unspecific target group found in the original datasets. We highlight the heterogeneity of this target group by appending _unspecified_ to the name of the target group, and, wherever we can, by mapping specific gender identity and sexual preference target groups into their correct categories (i.e., gender and sexuality). 
+
+However, we emphasize that we do not consider the taxonomy proposed here to be the ultimate and objective single true taxonomy, but would like to encourage researchers to see this taxonomy as a starting point and modify it to their needs and desires. For this purpose, we implemented all necessary functionality directly in the subdata library. 
+
 |age|disabled|gender|migration|origin|political|race|religion|sexuality|
-|---|---|---|---|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|---|---|
 |middle_aged|disabled_intellectual|men|migrants|arabs|communists|asians|atheists|asexuals|
 |seniors|disabled_mental|non_binary|refugees|brits|conservatives|blacks|buddhists|bisexuals|
 |young_aged|disabled_unspecified|transgenders|undocumented|chinese|democrats|indigenous|christians|heterosexuals|
-|age_unspecified| |women|migration_unspecified|eastern_european|left-wingers|latinx|hindus|homosexuals|
-| | |gender_unspecified| |indians|liberals|native_americans|jews|lgbtq_unspecified|
-| | | | |mexicans|republicans|pacific_islanders|mormons|sexuality_unspecified|
-| | | | |middle_eastern|right-wingers|whites|muslims| |
-| | | | |pakistani|political_unspecified|race_unspecified|religion_unspecified| |
-| | | | |polish| | | | |
-| | | | |russians| | | | |
-| | | | |origin_unspecified| | | | |
-
-
-### Library Functionality
-
-- create_target_dataset
-  - input: target (str), mapping_name (str, default 'original'), overview_name (str, default 'original', hf_token (str, default None)
-  - takes a valid target, downloads, processes and combines all available datasets for the target and returns a single dataset df with text, target and source columns. some datasets are only available if providing a valid huggingface token or uploading the raw data to input_folder. uses the specified mapping, taxononmy and overview for the creation of the dataset, defaulting to the original versions.
-  - output: target_dataset (df) 
-- create_category_dataset
-  - input: category (str), mapping_name (str, default 'original'), taxonomy_name (str, default 'original', overview_name (str, default 'original'), hf_token (str, default None)
-  - takes a valid category, downloads, processes and combines all available datasets for the targets in that category and returns a single dataset df with text, target and source columns. some datasets are only available if providing a valid huggingface token or uploading the raw data to input_folder. uses the specified mapping, taxononmy and overview for the creation of the dataset, defaulting to the original versions.
-  - output: target_dataset (df)
-- get_target_info
-  - input: target (str), overview_name (str, default 'original')
-  - takes a valid target and returns an overview of the datasets from which the target is available, the number of instances for the target in the dataset as well as the access requirements for the dataset. if the dataset is not readily available there is also information on how to access the dataset. uses the specified overview for the provided information, defaulting to the original version.
-  - output: none
-- get_category_info
-  - input: category (str), overview_name (str, default 'original'), taxonomy_name (str, default 'original')
-  - takes a valid category and returns an overview of the targets and the corresponding number of instances within the category, an overview of the datasets from which the targets are available and the corresponding number of instances per dataset, as well as the access requirements for the dataset. if the dataset is not readily available there is also information on how to access the dataset. uses the specified taxonomy and overview for the provided information, defaulting to the original versions.
-  - output: none
-- update_mapping_specific
-  - input: mapping_change ({dataset_name: {key_original: value_new}}), mapping_name (str, default 'modified')
-  - updates the specified mapping (either newly created if mapping_name non-existent or updating if mapping_name already created earlier) per dataset according to the provided dictionary. referring to the original mapping, users may map the key_original found in the original dataset_name to new targets (value_new). e.g., {'fanton_2021': {'POC': 'blacks'}} would map instances in dataset 'fanton_2021' that have the key_original 'POC' to value_new 'blacks' (originally, these are mapped to 'race_unspecified'). stores the resulting mapping with name 'mapping_name'. requires existing key_original (keys in original datasets) and value_new (targets) - refer to original mapping to identify valid values.
-  - output: mapping_dict (df) 
-- update_mapping_all
-  - input: mapping_change ({key_original: value_new}), mapping_name (str, default 'modified')
-  - updates the specified mapping (either newly created if mapping_name non-existent or updating if mapping_name already created earlier) across datasets according to the provided dictionary. referring to the original mapping, users may map the key_original found in different datasets to new targets (value_new). e.g., {'africans': 'origin_unspecified'} would map instances in any dataset that have the key_original 'africans' to value_new 'origin_unspecified' (originally, these are mapped to 'blacks'). stores the resulting mapping with name 'mapping_name'. requires existing key_original (keys in original datasets) and value_new (targets) - refer to original mapping to identify valid values.
-  - output: mapping_dict (df) 
-- update_taxonomy
-  - input: taxonomy_change ({target: (old_category, new_category)}), taxonomy_name (str, default 'modified')
-  - updates the specified taxonomy (either newly created if taxonomy_name non-existent or updating if taxonomy_name already created earlier), moving the specified target from old_category to new_category. if new_category == None, then the target will effectively be removed from the updated taxonomy. if new_category (str) not found in specified taxonomy, a new category with name new_category will be added to the updated taxonomy. e.g., {'jews': ('religion', 'race')} will move target 'jews' from category 'religion' to category 'race'. e.g., {'jews': ('religion', None)} will remove target 'jews' from taxonomy. e.g., {'jews': ('religion', 'relevant'), 'blacks': ('race', 'relevant'} will move targets 'jews' and 'blacks' into newly created category 'relevant'.
-  - output: taxonomy_dict (df)
-- add_target
-  - input: target (str), target_category (str), target_keywords [list of str], mapping_name (str, default 'modified'), taxonomy_name (str, default 'modified')
-  - creates a new target and moves it into specified target_category for the specified taxonomy (either newly created if taxonomy_name non-existent or updating if taxonomy_name already created earlier), mapping all original keywords specified in target_keywords to the new target for the specified mapping (either newly created if mapping_name non-existent or updating if mapping_name already created earlier). the target_category and target_keywords must already be existing - please refer to the taxonomy and the mapping to identify a valid target_category and valid target_keywords. e.g., target='disabled_general', target_category='disability', target_keywords=['disabled_unspecified','disabled','disabled_other'] creates new target 'disabled_general' in category 'disability' and maps the specified keywords to the newly created target.
-  - output: mapping_dict (df)
-- update_overview
-  - input: overview_name (str, default 'modified'), mapping_name (str, default 'modified'), taxonomy_name (str, defaut 'modified'), hf_token (str, default None)
-  - updates the overview that informs the get_info and create_dataset functions and stores the new overview with name overview_name. uses the mapping and taxonomy provided via mapping_name and taxonomy_name to create the updated overview. internally, the function tries to access all datasets to create the full overview, thus requiring a hf_token and the manual upload of relevant datasets into input_folder to consider all available datasets. function should be called after any operation that modifies the mapping or the taxonomy.    
-
+|age_unspecified||women|migration_unspecified|eastern_european|left-wingers|latinx|hindus|homosexuals|
+|||gender_unspecified||indians|liberals|native_americans|jews|lgbtq_unspecified|
+|||||mexicans|republicans|pacific_islanders|mormons|sexuality_unspecified|
+|||||middle_eastern|right-wingers|whites|muslims||
+|||||pakistani|political_unspecified|race_unspecified|religion_unspecified||
+|||||polish|||||
+|||||russians|||||
+|||||origin_unspecified|||||
