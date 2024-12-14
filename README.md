@@ -1,5 +1,19 @@
 ### Placeholder
 
+|age|disabled|gender|migration|origin|political|race|religion|sexuality|
+|---|---|---|---|---|---|---|---|---|---|---|
+|middle_aged|disabled_intellectual|men|migrants|arabs|communists|asians|atheists|asexuals|
+|seniors|disabled_mental|non_binary|refugees|brits|conservatives|blacks|buddhists|bisexuals|
+|young_aged|disabled_unspecified|transgenders|undocumented|chinese|democrats|indigenous|christians|heterosexuals|
+|age_unspecified| |women|migration_unspecified|eastern_european|left-wingers|latinx|hindus|homosexuals|
+| | |gender_unspecified| |indians|liberals|native_americans|jews|lgbtq_unspecified|
+| | | | |mexicans|republicans|pacific_islanders|mormons|sexuality_unspecified|
+| | | | |middle_eastern|right-wingers|whites|muslims| |
+| | | | |pakistani|political_unspecified|race_unspecified|religion_unspecified| |
+| | | | |polish| | | | |
+| | | | |russians| | | | |
+| | | | |origin_unspecified| | | | |
+
 ### Original Mapping
 The following tables document the original mapping that is used in the subdata library to map the target keywords found in the original datasets to a single taxonomy of target groups. 
 
@@ -325,14 +339,14 @@ Vidgen et al. (2021)
 |middle_aged|disabled_intellectual|men|migrants|arabs|communists|asians|atheists|asexuals|
 |seniors|disabled_mental|non_binary|refugees|brits|conservatives|blacks|buddhists|bisexuals|
 |young_aged|disabled_unspecified|transgenders|undocumented|chinese|democrats|indigenous|christians|heterosexuals|
-|age_unspecified||women|migration_unspecified|eastern_european|left-wingers|latinx|hindus|homosexuals|
-|||gender_unspecified||indians|liberals|native_americans|jews|lgbtq_unspecified|
-|||||mexicans|republicans|pacific_islanders|mormons|sexuality_unspecified|
-|||||middle_eastern|right-wingers|whites|muslims||
-|||||pakistani|political_unspecified|race_unspecified|religion_unspecified||
-|||||polish|||||
-|||||russians|||||
-|||||origin_unspecified|||||
+|age_unspecified| |women|migration_unspecified|eastern_european|left-wingers|latinx|hindus|homosexuals|
+| | |gender_unspecified| |indians|liberals|native_americans|jews|lgbtq_unspecified|
+| | | | |mexicans|republicans|pacific_islanders|mormons|sexuality_unspecified|
+| | | | |middle_eastern|right-wingers|whites|muslims| |
+| | | | |pakistani|political_unspecified|race_unspecified|religion_unspecified| |
+| | | | |polish| | | | |
+| | | | |russians| | | | |
+| | | | |origin_unspecified| | | | |
 
 
 ### Library Functionality
