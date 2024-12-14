@@ -1,6 +1,9 @@
 ### Placeholder
 
 ### Original Mapping
+The following tables document the original mapping that is used in the subdata library to map the target keywords found in the original datasets to a single taxonomy of target groups. 
+
+For the mapping, most of the decisions taken were rather straightforward and little contested, e.g., it seems logical to map both the target “JEWS” found in one dataset and the target “jewish people” found in another dataset to the single target “jews”. However, some decisions were more complicated. Whether the target “africans” should be mapped to the target “blacks” or to the target “africans”, thus interpreting it as a question of origin rather than one of race, might never be definitely determined. In such cases, we tried to consult the publication corresponding to the dataset to see whether the original creators of the resource specifically mentioned one of the potential meanings. If so, we followed their example, and if not, we tried to apply reasonable judgment and be consistent throughout the mapping.
 
 Fanton et al. (2021)
 |keyword|target|
