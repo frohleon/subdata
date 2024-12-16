@@ -3,7 +3,10 @@ We develop the subdata Python library as a central resource for researchers inte
 
 The library is developed and maintained by Leon Fröhling (leon.froehling@gesis.org) and Pietro Bernardelle (p.bernardelle@uq.edu.au). We welcome any suggestions for further datasets that should be included or possible extensions of the library's functionality. 
 
-### Library Documentation
+### Installation
+We make the library available via PyPi: https://pypi.org/project/subdata/. It can thus be conveniently installed via `pip install subdata`. 
+
+### Functionality
 In the following, we explain the core functionality of the subdata library. Most importantly, the functions *create_target_dataset* and *create_category_dataset* allow the user to automatically download, process and combine instances targeted at a specified target group or category from different data sources into a single dataset, using a standardized mapping from keywords to target and a unified taxonomy. The functions *get_target_info* and *get_category_info* may be consulted before the call to create the actual dataset, as they provide the info on the number of instances and data sources available for the specified target groups or categories.
 
 In addition to the library's core functionality, we took care to implement the possibility to modify the resources we provide, namely, the mapping from keywords found in the original datasets to target groups and the assignment of target groups into categories. The functions *update_mapping_specific* and *update_mapping_all* allow to map a set of keywords to another target group, either for a single dataset or across all datasets. The function *add_target* allows to introduce a new target group altogether, while the function *update_taxonomy* allows to move target groups from one category to another as well as to even create new categories, assigning multiple existing target groups into the new category. Lastly, the function *update_overview* should be called after any modification to the mapping or the taxonomy is done in order to update the overview used internally to combine the requested dataset when calling *create_target_dataset* or *create_category_dataset*.
