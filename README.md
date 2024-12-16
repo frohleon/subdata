@@ -11,7 +11,7 @@ In the following, we explain the core functionality of the subdata library. Most
 
 In addition to the library's core functionality, we took care to implement the possibility to modify the resources we provide, namely, the mapping from keywords found in the original datasets to target groups and the assignment of target groups into categories. The functions *update_mapping_specific* and *update_mapping_all* allow to map a set of keywords to another target group, either for a single dataset or across all datasets. The function *add_target* allows to introduce a new target group altogether, while the function *update_taxonomy* allows to move target groups from one category to another as well as to even create new categories, assigning multiple existing target groups into the new category. Lastly, the function *update_overview* should be called after any modification to the mapping or the taxonomy is done in order to update the overview used internally to combine the requested dataset when calling *create_target_dataset* or *create_category_dataset*.
 
-*create_target_dataset*
+`create_target_dataset`
   - input: target (str), mapping_name (str, default 'original'), overview_name (str, default 'original', hf_token (str, default None)
   - takes a valid target, downloads, processes and combines all available datasets for the target and returns a single dataset df with text, target and source columns. some datasets are only available if providing a valid huggingface token or uploading the raw data to input_folder. uses the specified mapping, taxononmy and overview for the creation of the dataset, defaulting to the original versions.
   - output: target_dataset (df) 
