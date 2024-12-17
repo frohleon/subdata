@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='subdata',  # Replace with your package’s name
-    version='0.1.15',
+    version='0.2.0',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[ # List your dependencies here
@@ -18,7 +18,7 @@ setup(
     url = 'https://github.com/frohleon/subdata_library',
     author='Leon Fröhling',  
     author_email='leon.froehling@gesis.org',
-    description='A library for automatically creating targeted hate speech datasets.',
+    description='A Python library for automatically creating targeted hate speech datasets.',
     long_description = long_description,
     long_description_content_type = 'text/markdown',
     classifiers=[
