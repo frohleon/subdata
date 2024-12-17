@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
-with open('README.md', 'r') as fh:
+with open('README.md', 'r', encoding="utf8") as fh:
     long_description = fh.read()
 
 setup(
     name='subdata',  # Replace with your package’s name
-    version='0.2.0',
+    version='0.2.1',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[ # List your dependencies here
@@ -23,7 +23,7 @@ setup(
     long_description_content_type = 'text/markdown',
     classifiers=[
         'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: GPL-3.0',  # License type
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',  # License type
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.10',
