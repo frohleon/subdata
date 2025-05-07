@@ -7,7 +7,7 @@ setup(
     name='subdata',  # Replace with your package’s name
     version='0.2.5',
     # packages=find_packages(),
-    packages = ['subdata'],
+    packages = ['src/subdata'],
     include_package_data=True,
     install_requires=[ # List your dependencies here
         'pandas',
