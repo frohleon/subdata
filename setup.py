@@ -6,7 +6,8 @@ with open('README.md', 'r', encoding="utf8") as fh:
 setup(
     name='subdata',  # Replace with your package’s name
     version='0.2.4',
-    packages=find_packages(),
+    # packages=find_packages(),
+    packages = ['subdata'],
     include_package_data=True,
     install_requires=[ # List your dependencies here
         'pandas',
