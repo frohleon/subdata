@@ -6,7 +6,7 @@ import importlib.resources
 
 from subdata.download import download_datasets
 from subdata.process import process_datasets
-from subdata.utils import load_mapping, load_taxonomy, load_download, save_modified_resource
+from subdata.utils import load_mapping, load_taxonomy, load_download, save_modified_resource, taxonomy_to_latex, mapping_to_latex, save_latex
 
 
 ### function to update the mapping from dataset keys to targets for a single, specified dataset
@@ -177,7 +177,7 @@ def add_target(target, target_category, target_keywords, mapping_name='modified'
 # input: {taxonomy_name='original', target_categories='all', export=True} the name of the taxonomy to display and the target categories to include; includes all categories if target_categories=='all', else expects list of categories to include; exports .json if export==True
 # returns the requested taxonomy
 
-def show_taxonomy(taxonomy_name='original', target_categories='all', export=True):
+def show_taxonomy(taxonomy_name='original', target_categories='all', export_json=True, export_latex=True):
 
     taxonomy = load_taxonomy(taxonomy_name)
 
@@ -189,8 +189,12 @@ def show_taxonomy(taxonomy_name='original', target_categories='all', export=True
     else:
         taxonomy_out = taxonomy.copy()
 
-    if export == True:
+    if export_json == True:
         save_modified_resource(taxonomy_out, 'taxonomy_'+taxonomy_name)
+
+    if export_latex == True:
+        taxonomy_latex = taxonomy_to_latex(taxonomy_out)
+        save_latex(taxonomy_latex, 'taxonomy_'+taxonomy_name)
 
     return taxonomy_out
 
@@ -198,7 +202,7 @@ def show_taxonomy(taxonomy_name='original', target_categories='all', export=True
 # input: {mapping_name='original', datasets='all', export=True} the name of the mappings to display and the datasets to include; includes all datasets if datasets=='all', else expects list of datasets to include; exports .json if export==True
 # returns the requested taxonomy
 
-def show_mapping(mapping_name='original', datasets='all', export=True):
+def show_mapping(mapping_name='original', datasets='all', export_json=True, export_latex=True):
 
     mapping = load_mapping(mapping_name)
 
@@ -210,8 +214,12 @@ def show_mapping(mapping_name='original', datasets='all', export=True):
     else:
         mapping_out = mapping.copy()
 
-    if export == True:
+    if export_json == True:
         save_modified_resource(mapping_out, 'mapping_'+mapping_name)
+
+    if export_latex == True:
+        mapping_latex = mapping_to_latex(mapping_out)
+        save_latex(mapping_latex, 'mapping_'+mapping_name)
 
     return mapping_out
 
