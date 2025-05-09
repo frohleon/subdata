@@ -174,7 +174,46 @@ def add_target(target, target_category, target_keywords, mapping_name='modified'
     return mapping_dict
 
 
+# input: {taxonomy_name='original', target_categories='all', export=True} the name of the taxonomy to display and the target categories to include; includes all categories if target_categories=='all', else expects list of categories to include; exports .json if export==True
+# returns the requested taxonomy
 
+def show_taxonomy(taxonomy_name='original', target_categories='all', export=True):
+
+    taxonomy = load_taxonomy(taxonomy_name)
+
+    if target_categories != 'all':
+        taxonomy_out = {}
+        for target_category in target_categories:
+            if target_category in taxonomy.keys():
+                taxonomy_out[target_category] = taxonomy[target_category]
+    else:
+        taxonomy_out = taxonomy.copy()
+
+    if export == True:
+        save_modified_resource(taxonomy_out, 'taxonomy_'+taxonomy_name)
+
+    return taxonomy_out
+
+
+# input: {mapping_name='original', datasets='all', export=True} the name of the mappings to display and the datasets to include; includes all datasets if datasets=='all', else expects list of datasets to include; exports .json if export==True
+# returns the requested taxonomy
+
+def show_mapping(mapping_name='original', datasets='all', export=True):
+
+    mapping = load_mapping(mapping_name)
+
+    if datasets != 'all':
+        mapping_out = {}
+        for dataset in datasets:
+            if dataset in mapping.keys():
+                mapping_out[dataset] = mapping[dataset]
+    else:
+        mapping_out = mapping.copy()
+
+    if export == True:
+        save_modified_resource(mapping_out, 'mapping_'+mapping_name)
+
+    return mapping_out
 
 
 # input: {overivew_name='modified', mapping_name='modified', taxonomy_name='modified'} the name of the overview to generate and the names of the (modified) taxonomy and mapping to use for the creation of the overview. (if both mapping and taxonomy are 'original' the call will never lead to changes since a modified mapping and taxonomy can never be named original)

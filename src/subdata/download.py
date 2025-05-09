@@ -142,7 +142,7 @@ def check_requirements(dataset_name, dataset_dict, hf_token=None):
                 print(f'\t{dataset_name} - Manual dataset upload successful.')
                 return True
             else:
-                print(f'\t{dataset_name} unavailable - Required dataset {dataset_dict["filename"]+".zip"} not found. Please check instructions and manually upload the dataset to the current working directory.')
+                print(f'\t{dataset_name} unavailable - Required dataset {dataset_dict["filename"]+".zip"} not found. Please check instructions and manually upload the dataset to the input_folder in the current working directory.')
                 return False
         case _:
             return True
