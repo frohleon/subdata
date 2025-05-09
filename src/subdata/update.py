@@ -6,7 +6,7 @@ import importlib.resources
 
 from subdata.download import download_datasets
 from subdata.process import process_datasets
-from subdata.utils import load_mapping, load_taxonomy, load_download, save_modified_resource, taxonomy_to_latex, mapping_to_latex, save_latex
+from subdata.utils import load_mapping, load_taxonomy, load_overview, load_download, save_modified_resource, taxonomy_to_latex, mapping_to_latex, save_latex
 
 
 ### function to update the mapping from dataset keys to targets for a single, specified dataset
@@ -174,7 +174,7 @@ def add_target(target, target_category, target_keywords, mapping_name='modified'
     return mapping_dict
 
 
-# input: {taxonomy_name='original', target_categories='all', export=True} the name of the taxonomy to display and the target categories to include; includes all categories if target_categories=='all', else expects list of categories to include; exports .json if export==True
+# input: {taxonomy_name='original', target_categories='all', export=True} the name of the taxonomy to display and the target categories to include; includes all categories if target_categories=='all', else expects list of categories to include; exports .json if export_json==True and .txt with latex-table if export_latex==True
 # returns the requested taxonomy
 
 def show_taxonomy(taxonomy_name='original', target_categories='all', export_json=True, export_latex=True):
@@ -199,7 +199,7 @@ def show_taxonomy(taxonomy_name='original', target_categories='all', export_json
     return taxonomy_out
 
 
-# input: {mapping_name='original', datasets='all', export=True} the name of the mappings to display and the datasets to include; includes all datasets if datasets=='all', else expects list of datasets to include; exports .json if export==True
+# input: {mapping_name='original', datasets='all', export=True} the name of the mappings to display and the datasets to include; includes all datasets if datasets=='all', else expects list of datasets to include; exports .json if export_json==True and .txt with latex-table if export_latex==True
 # returns the requested taxonomy
 
 def show_mapping(mapping_name='original', datasets='all', export_json=True, export_latex=True):
@@ -222,6 +222,23 @@ def show_mapping(mapping_name='original', datasets='all', export_json=True, expo
         save_latex(mapping_latex, 'mapping_'+mapping_name)
 
     return mapping_out
+
+
+# input: {overview_name='original', export_json=True, export_latex=True} the name of the overview; exports .json if export_json==True and .txt with latex-table if export_latex==True
+# returns the requested overview
+
+def show_overview(overview_name='original', export_json=True, export_latex=True):
+
+    overview = load_overview(overview_name)
+
+    if export_json == True:
+        save_modified_resource(overview, 'overview_'+overview_name)
+
+    # if export_latex == True:
+    #     overview_latex = overview_to_latex(overview)
+    #     save_latex(overview_latex, 'overview_'+overview_name)
+
+    return overview
 
 
 # input: {overivew_name='modified', mapping_name='modified', taxonomy_name='modified'} the name of the overview to generate and the names of the (modified) taxonomy and mapping to use for the creation of the overview. (if both mapping and taxonomy are 'original' the call will never lead to changes since a modified mapping and taxonomy can never be named original)
