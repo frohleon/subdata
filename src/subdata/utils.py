@@ -95,6 +95,7 @@ def save_latex(resource_str, resource_name):
 
 def taxonomy_to_latex(resource):
     n_rows = np.max([len(v) for k,v in resource.items()])
+    n_cols = len(resource.keys())+1
 
     start_str = f'\\begin{{table*}}\n\\footnotesize\n\\begin{{tabular}}{{{''.join(['l' for i in range(n_cols)])}}}\n\\toprule\n'
     first_row = 'category & ' + ' & '.join(resource.keys()) + ' \\\\\n\\midrule'
