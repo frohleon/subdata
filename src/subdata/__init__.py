@@ -11,3 +11,5 @@ from subdata.update import update_mapping_all
 from subdata.update import update_taxonomy
 from subdata.update import update_overview
 from subdata.update import add_target
+from subdata.update import show_taxonomy
+from subdata.update import show_mapping
