@@ -238,7 +238,7 @@ def show_overview(overview_name='original', taxonomy_name='original', export_jso
         overview_latex = overview_to_latex(overview, taxonomy_name)
         save_latex(overview_latex, 'overview_'+overview_name)
 
-    return overview_latex
+    return overview
 
 
 # input: {overivew_name='modified', mapping_name='modified', taxonomy_name='modified'} the name of the overview to generate and the names of the (modified) taxonomy and mapping to use for the creation of the overview. (if both mapping and taxonomy are 'original' the call will never lead to changes since a modified mapping and taxonomy can never be named original)
