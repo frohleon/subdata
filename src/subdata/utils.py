@@ -1,6 +1,6 @@
 import json
 import os
-import numpy as np
+import numpy as np, pandas as pd
 
 import importlib.resources
 
@@ -134,3 +134,55 @@ def mapping_to_latex(resource):
 
     return full_str.replace('_','\\_')
     
+
+def overview_to_latex(resource, taxonomy_name):
+
+    taxonomy = load_taxonomy(taxonomy_name)
+
+    dataset_overview = {}
+    dataset_targets = {}
+
+    for cat, gro in taxonomy.items():
+        dataset_overview[cat] = {}
+        dataset_targets[cat] = {}
+        for g in gro:
+            for vals in resource[g]:
+                if vals[0] in dataset_overview[cat].keys():
+                    dataset_overview[cat][vals[0]] += vals[1]
+                    dataset_targets[cat][vals[0]] += 1
+                else:
+                    dataset_overview[cat][vals[0]] = vals[1]
+                    dataset_targets[cat][vals[0]] = 1
+
+    categories = list(dataset_overview.keys())
+    categories.sort()
+
+    datasets = list(set([d for cat, cat_dict in dataset_overview.items() for d in cat_dict.keys()]))
+    datasets.sort()
+
+    row_sums = [np.sum([dataset_value if dataset_name == dataset else 0 for cat_dict in dataset_overview.values() for dataset_name, dataset_value in cat_dict.items()]) for dataset in datasets]
+    col_sum = [np.sum([v for v in dataset_overview[cat].values()]) for cat in categories]
+
+    n_cols = len(categories) + 2
+    col_sums = col_sum + [np.sum(col_sum)]
+    n_targets = [len(taxonomy[cat]) for cat in categories]
+
+    start_str = f'\\begin{{table*}}\n\\footnotesize\n\\begin{{tabular}}{{l|{''.join(['l' for i in range(n_cols-2)])}|l}}\n\\toprule\n'
+    first_row = 'Dataset~\\textbackslash~Category & ' + ' & '.join(categories) + ' & Dataset Size \\\\\n\\midrule\n'
+
+    content_row = ''
+
+    for i, dataset in enumerate(datasets):
+        row_str = f'{dataset}'
+        for category in categories:
+            ct = dataset_overview[category][dataset] if dataset in dataset_overview[category].keys() else 0
+            n = dataset_targets[category][dataset] if dataset in dataset_targets[category].keys() else 0
+            row_str += f' & {ct} ({n})'
+        row_str += f' & {row_sums[i]} \\\\'
+        content_row += row_str + '\n'
+
+    last_row = '\\midrule\nAll Datasets & ' + ' & '.join([f'{s} ({n})' for s,n in zip(col_sums, n_targets)]) + f' & {col_sums[-1]} \\\\'
+    end_str = '\n\\bottomrule\n\\end{tabular}\n\\end{table*}'
+
+    full_str = start_str + first_row + content_row + last_row + end_str
+    return full_str.replace('_','\\_')
